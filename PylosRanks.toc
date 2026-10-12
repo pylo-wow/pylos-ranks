@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: Pylos Ranks
+## Category: Pylos
+## Notes: Automatically replaces spells on the action bars with the highest known rank. Spells on the blacklist stay unchanged.
+## IconTexture: Interface\AddOns\PylosRanks\Icon.tga
+## Author: Pylo
+## Version: 1.0.0
+## X-License: GPL-3.0-or-later
+## RequiredDeps: PylosCore
+## SavedVariables: PylosRanksDB
+## SavedVariablesPerCharacter: PylosRanksCharDB
+
+Init.lua
+Core.lua
