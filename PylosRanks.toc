@@ -4,9 +4,9 @@
 ## Notes: Automatically replaces spells on the action bars with the highest known rank. Spells on the blacklist stay unchanged.
 ## IconTexture: Interface\AddOns\PylosRanks\Icon.tga
 ## Author: Pylo
-## Version: 1.0.0
+## Version: 1.0.1
 ## X-License: GPL-3.0-or-later
-## RequiredDeps: PylosCore
+## OptionalDeps: PylosCore
 ## SavedVariables: PylosRanksDB
 ## SavedVariablesPerCharacter: PylosRanksCharDB
 

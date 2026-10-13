@@ -42,7 +42,7 @@ local function ReadSpellBook()
     wipe(best)
     for lineIndex = 1, C_SpellBook.GetNumSpellBookSkillLines() do
         local line = C_SpellBook.GetSpellBookSkillLineInfo(lineIndex)
-        for slot = line.itemIndexOffset + 1, line.itemIndexOffset + line.numSpellBookItems do
+        for slot = (line and line.itemIndexOffset or 0) + 1, line and line.itemIndexOffset + line.numSpellBookItems or 0 do
             local item = C_SpellBook.GetSpellBookItemInfo(slot, BANK)
             if item and item.itemType == Enum.SpellBookItemType.Spell and item.spellID
                 and not item.isPassive and not item.isOffSpec and not known[item.spellID] then
@@ -67,6 +67,18 @@ local function ReadSpellBook()
         if a.name ~= b.name then return a.name < b.name end
         return a.order < b.order
     end)
+end
+
+-- more than one rank of a spell in the book (otherwise "Shift: all ranks" would promise nothing)
+local function HasSeveralRanks()
+    local seen = {}
+    for _, spell in ipairs(spells) do
+        if spell.ranked then
+            if seen[spell.name] then return true end
+            seen[spell.name] = true
+        end
+    end
+    return false
 end
 
 -- spell ID, entry and target rank if a low rank lies on the slot
@@ -251,7 +263,7 @@ local function CreateList(parent, emptyText, onClick)
         end
         row.spell = spell
         row.icon:SetTexture(C_Spell.GetSpellTexture(spell.id))
-        row.label:SetText(spell.label)
+        row.label:SetText(spell.shown or spell.label)
     end)
     ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, view)
     ScrollUtil.AddManagedScrollBarVisibilityBehavior(scrollBox, scrollBar)
@@ -287,16 +299,20 @@ local function InitBlacklist(frame)
 
         local function Refresh()
             ReadSpellBook()
+            local several = HasSeveralRanks()
+            knownHeader:SetText(several and L["Known spells (click: blacklist, Shift: all ranks)"] or L["Known spells (click: blacklist)"])
+            blacklistHeader:SetText(several and L["Blacklist (click: remove, Shift: all ranks)"] or L["Blacklist (click: remove)"])
             local filter = search:GetText():lower()
             local results, listed = {}, {}
             for _, spell in ipairs(spells) do
                 if spell.ranked and not blacklist[spell.id] and (filter == "" or spell.search:find(filter, 1, true)) then
+                    spell.shown = several and spell.label or spell.name
                     results[#results + 1] = spell
                 end
             end
             -- only spells the character knows right now (not ones lost e.g. by a talent reset)
             for id, label in pairs(blacklist) do
-                if known[id] then listed[#listed + 1] = { id = id, label = label } end
+                if known[id] then listed[#listed + 1] = { id = id, label = label, shown = several and label or known[id].name } end
             end
             table.sort(listed, function(a, b) return a.label < b.label end)
             resultList.SetItems(results)

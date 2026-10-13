@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+- Without Pylos Core the addon no longer causes a load error: it stays off and shows a chat line with a link to Pylos Core on CurseForge.
+- Blacklist page: spells show without the rank, and the hint "Shift: all ranks" appears, only when a spell has several ranks in the book.
+
 ## 1.0.0
 - First release. Replaces spells on the action bars with the highest known rank.
 - Blacklist per character: spells on it stay unchanged (spell tooltip line, chat note "ignored").
