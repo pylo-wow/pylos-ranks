@@ -139,7 +139,8 @@ StaticPopupDialogs.PYLOSRANKS_KEEP = {
         local spell = askQueue[1]
         if spell then confirmed[spell.id] = true end
     end,
-    OnHide = function()
+    OnHide = function(dialog)
+        if dialog:IsShown() then return end -- hidden with the whole UI (Alt+Z): still open, not answered
         local spell = table.remove(askQueue, 1)
         if spell then asking[spell.id] = nil end
         C_Timer.After(0, ShowQuestion) -- next question only once the dialog is fully closed
