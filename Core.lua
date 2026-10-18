@@ -355,7 +355,7 @@ local function InitBlacklist(frame)
     frame.Refresh()
 end
 
--- Pylos Core builds the options menu, minimap button and /pranks from this
+-- Kit\Kit.lua builds the options menu, minimap button and /pranks from this
 ns.options = {
     savedVariable = "PylosRanksDB",
     title = TITLE,

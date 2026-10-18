@@ -4,12 +4,12 @@
 
 Replaces spells on your action bars with the highest rank you know. Learn Frostbolt Rank 3 and the bar button switches from Rank 2 on its own.
 
-Needs **Pylos Core**. For WoW Forever (Interface 16001).
+For WoW Forever (Interface 16001).
 
 ## Use
 
 - **Left-click the minimap button** or type `/pranks`: check the bars now. The chat tells you how many spells were updated.
-- **Right-click the button** or type `/pranks options`: open the options (in the game options under *Pylos*).
+- **Right-click the button** or type `/pranks options`: open the options (in the game options under *AddOns*, *Pylos Ranks*).
 - The button is gray while everything is up to date. It lights up and pulses when a lower rank sits on a bar.
 - Nothing is replaced in combat. A check asked for during combat runs when it ends.
 
