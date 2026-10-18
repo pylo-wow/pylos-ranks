@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+- The question "keep the lower rank?" no longer counts as answered when the whole interface is hidden (Alt+Z) while it is open; it stays open and is asked again.
+- Works with the new option pages of Pylos Core 1.0.1.
+
 ## 1.0.1
 - Without Pylos Core the addon no longer causes a load error: it stays off and shows a chat line with a link to Pylos Core on CurseForge.
 - Blacklist page: spells show without the rank, and the hint "Shift: all ranks" appears, only when a spell has several ranks in the book.
