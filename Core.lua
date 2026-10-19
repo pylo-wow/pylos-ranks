@@ -1,5 +1,4 @@
 local addonName, ns = ...
-if ns.off then return end
 local L = ns.L
 local TITLE = "Pylos Ranks"
 
@@ -96,8 +95,8 @@ local function UpdateHint()
     ReadSpellBook()
     local outdated = false
     for slot = 1, NUM_ACTION_SLOTS do
-        local id = Outdated(slot)
-        if id and not blacklist[id] then
+        local id, _, target = Outdated(slot)
+        if id and not blacklist[id] and failed[slot] ~= target then -- a slot the scan gave up on does not count
             outdated = true
             break
         end
@@ -158,7 +157,7 @@ local function Ask(spell)
     if #askQueue == 1 then ShowQuestion() end
 end
 
--- returns the number of replaced spells
+-- returns the number of replaced spells, nil if it postponed itself (cursor busy)
 function Scan()
     scanQueued = false
     QueueHint()
@@ -186,7 +185,7 @@ function Scan()
             elseif GetCursorInfo() then
                 -- the player is dragging something, ClearCursor would drop it
                 QueueScan(1)
-                return updated
+                return nil
             else
                 C_Spell.PickupSpell(target)
                 if GetCursorInfo() then PlaceAction(slot) end
@@ -220,7 +219,8 @@ local function ScanNow()
     wipe(reported) -- report ignored spells again
     wipe(failed)
     forceReplace = true
-    print(PREFIX .. L["%d spells updated."]:format(Scan()))
+    local updated = Scan()
+    if updated then print(PREFIX .. L["%d spells updated."]:format(updated)) end
 end
 
 -- emptyText is shown while the list is empty
@@ -298,8 +298,7 @@ local function InitBlacklist(frame)
 
         local resultList, blacklistList
 
-        local function Refresh()
-            ReadSpellBook()
+        local function Refresh() -- reads `spells` as ReadSpellBook left them
             local several = HasSeveralRanks()
             knownHeader:SetText(several and L["Known spells (click: blacklist, Shift: all ranks)"] or L["Known spells (click: blacklist)"])
             blacklistHeader:SetText(several and L["Blacklist (click: remove, Shift: all ranks)"] or L["Blacklist (click: remove)"])
@@ -352,6 +351,7 @@ local function InitBlacklist(frame)
 
         search:HookScript("OnTextChanged", Refresh)
     end
+    ReadSpellBook()
     frame.Refresh()
 end
 
