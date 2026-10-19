@@ -43,7 +43,6 @@ local addonName, ns = ...
 -- page: a subpage below the addon for content too tall for a row. init(frame) runs on
 -- every show; frame is the area below the page title. entries instead: the subpage is built from rows of the
 -- types above (no page inside), with their keys, defaults, tooltips and dependsOn as on the main page.
--- ns.kit.OpenPage(label) opens such a subpage (not in combat).
 -- Entries with a key, and minimap, may have onChange = function(value) end.
 -- dependsOn = "otherKey", enabledWhen = value: grayed out unless that option has
 -- that value. enabledIf = function() -> bool: grayed out while false.
@@ -343,7 +342,7 @@ local function Build()
     local target -- the page the entry being built goes to: the main page or a subpage of entries
     local pages = {}       -- every page built from rows, main page first (laid out together)
     local ownerOf = {}     -- entry of a subpage -> the page entry that holds it
-    local subpages = {}    -- page entry -> its page, label -> its subcategory (OpenPage)
+    local subpages = {}    -- page entry -> its page
     local minimapButton
     local master -- entry of the master switch, if any
     local title -- display name
@@ -357,18 +356,6 @@ local function Build()
             return
         end
         Settings.OpenToCategory(category:GetID())
-    end
-
-    -- opens a subpage built from entries (a page entry's label); false if there is none
-    function ns.kit.OpenPage(label)
-        local sub = subpages[label]
-        if not sub then return false end
-        if InCombatLockdown() then
-            Problem(L["the options cannot be opened in combat."])
-            return true
-        end
-        Settings.OpenToCategory(sub:GetID())
-        return true
     end
 
     -- Changes an option the way the menu would: its handlers run and the page follows
@@ -527,7 +514,7 @@ local function Build()
             local sub = NewPage(entry.label)
             pages[#pages + 1] = sub
             subpages[entry] = sub
-            subpages[entry.label] = Settings.RegisterCanvasLayoutSubcategory(category, sub.panel, entry.label)
+            Settings.RegisterCanvasLayoutSubcategory(category, sub.panel, entry.label)
             return
         end
         local panel = CreateFrame("Frame")
