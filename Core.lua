@@ -103,7 +103,7 @@ local function UpdateHint()
         end
     end
     outdatedShown = outdated
-    ns.SetAlert(outdated)
+    if ns.SetAlert then ns.SetAlert(outdated) end -- missing when the kit failed to build
 end
 
 local function QueueHint()

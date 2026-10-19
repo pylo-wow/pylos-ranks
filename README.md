@@ -35,4 +35,4 @@ The blacklist belongs to the character; the other options are shared by the acco
 
 ## License
 
-GPL-3.0-or-later, see `LICENSE`.
+GPL-3.0-or-later, see `LICENSE`. The addon ships no game data.
